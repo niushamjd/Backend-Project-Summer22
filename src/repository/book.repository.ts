@@ -1,68 +1,95 @@
 import Book from '../dto/book.dto';
+import KnexDB from '../db/knex';
 import { NotFoundError, DuplicateError, GenericError } from '../common/errorHandler';
-import { addResponse, deleteResponse, updateResponse } from '../common/responseHandler';
+import { addResponse, deleteResponse, displayResponse, updateResponse } from '../common/responseHandler';
 let books: Array<Book>;
 class bookRepository {
+    knx: typeof KnexDB;
     constructor() {
         books = new Array<Book>();
+        this.knx = KnexDB;
     }
     bookExists(id: number): boolean {
-        for (let i = 0; i < books.length; i++) {
-            if (books[i].bookId === id) {
+        this.knx.knexdb('books').where({ bookId: id }).select().then((result) => {
+            if (result.length > 0) {
                 return true;
             }
+            else {
+                return false;
+            }
         }
+        ).catch((error) => {
+            return false;
+        }
+        );
         return false;
     }
     addBook(book: Book): Promise<addResponse> {
         return new Promise<addResponse>((resolve, reject) => {
-            try {
-                books.push(book);
+
+            this.knx.knexdb('books').insert(book).then(() => {
                 resolve(new addResponse("Book added successfully"));
-            } catch (error) {
-                reject(new GenericError);
             }
-        }   
-        );
-    }
-    displayAll(): Promise<Book[]> {
-        return new Promise<Book[]> ((resolve, reject) => {
-            if (books.length == 0) {
-                reject(new NotFoundError("No books found"));
+            ).catch((error) => {
+                reject(new GenericError("Error adding book"));
             }
-            resolve(books);
+            );
+
         });
     }
-    displayBook(id: number): Promise < Book > {
-            return new Promise<Book>((resolve, reject) => {
-                for (let i = 0; i < books.length; i++) {
-                    if (books[i].bookId == id) {
-                        resolve(books[i]);
-                    }
+    displayAll(): Promise<displayResponse> {
+        return new Promise<displayResponse>((resolve, reject) => {
+            this.knx.knexdb('books').select().then((result) => {
+                if (result.length > 0) {
+                    resolve(new displayResponse("Fetch Succesful", result));
                 }
-                reject( new NotFoundError("Book not found"));
-            });
-        }
+                else {
+                    reject(new NotFoundError("No books found"));
+                }
+            }
+            ).catch((error) => {
+                reject(new GenericError("Error fetching books"));
+            }
+            );
+        });
+    }
+    displayBook(id: number): Promise<displayResponse> {
+        return new Promise<displayResponse>((resolve, reject) => {
+            this.knx.knexdb('books').where({ bookId: id }).select().then((result) => {
+                if (result.length > 0) {
+                    resolve(new displayResponse("Fetch Succesful", result));
+                }
+                else {
+                    reject(new NotFoundError("No book with id " + id + " found"));
+                }
+            }
+            ).catch((error) => {
+                reject(new GenericError("Error fetching books"));
+            }
+            );
+        });
+    }
     deleteBook(id: number): Promise<deleteResponse> {
         return new Promise<deleteResponse>((resolve, reject) => {
-        for (let i = 0; i < books.length; i++) {
-            if (books[i].bookId == id) {
-                books.splice(i, 1);
+            this.knx.knexdb('books').where({ bookId: id }).del().then(() => {
                 resolve(new deleteResponse("Book deleted successfully"));
             }
-        }
-        reject( new NotFoundError("Book not found"));
+            ).catch((error) => {
+                reject(new GenericError("Error deleting book"));
+            })
+
         });
+
     }
     updateBook(book: Book): Promise<updateResponse> {
         return new Promise<updateResponse>((resolve, reject) => {
-            for (let i = 0; i < books.length; i++) {
-                if (books[i].bookId == book.bookId) {
-                    books[i] = book;
-                    resolve(new updateResponse("Book updated successfully"));
-                }
+
+            this.knx.knexdb('books').where({ bookId: book.bookId }).update(book).then(() => {
+                resolve(new deleteResponse("Book deleted successfully"));
             }
-            reject( new NotFoundError("Book not found"));
+            ).catch((error) => {
+                reject(new GenericError("Error deleting book"));
+            })
         });
     }
 }

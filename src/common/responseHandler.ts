@@ -1,4 +1,4 @@
-export class responseHandler {
+export class httpResponse {
     message : string;
     status : number;
     data ?: any;
@@ -8,17 +8,22 @@ export class responseHandler {
         this.data = data;
     }
 }
-export class deleteResponse extends responseHandler {
+export class displayResponse extends httpResponse {
+    constructor(message: string,data?: any) {
+        super("Display Successful" || message, 200,data);
+    }
+}
+export class deleteResponse extends httpResponse {
     constructor(message: string,data?: any) {
         super("Deleted successfully" || message, 200,data);
     }
 }
-export class addResponse extends responseHandler {
+export class addResponse extends httpResponse {
     constructor(message: string,data?: any) {
         super("Added successfully" || message, 201,data);
     }
 }
-export class updateResponse extends responseHandler {
+export class updateResponse extends httpResponse {
     constructor(message: string,data?: any) {
         super("Updated successfully" || message, 200,data);
     }

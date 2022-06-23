@@ -2,8 +2,8 @@ import express, { Request, Response, NextFunction } from 'express';
 import * as schemas from '../validations/book.validation';
 import bookService from '../services/book.service'
 import Book from '../dto/book.dto';
-import { DuplicateError, NotFoundError, WrongInputFormatError } from '../common/errorHandler';
-import { addResponse, deleteResponse, updateResponse } from '../common/responseHandler';
+import { WrongInputFormatError } from '../common/errorHandler';
+import { addResponse, deleteResponse, displayResponse, updateResponse } from '../common/responseHandler';
 
 class BooksController {
     router: express.Router;
@@ -15,18 +15,17 @@ class BooksController {
         schemas.default.add.validateAsync(req.body)
             .then(async (bookData: Book) => {
                 bookService.addBook(bookData).then((resp: addResponse) => {
-                    res.send(resp);
+                    next(resp);
                 }).catch((err) => {
                     next(err);
                 });         
-            }).catch((err: WrongInputFormatError) => {
-                next(new WrongInputFormatError(err.message));
-                //error middleware will handle the undefined error, use next and change in appts.ts
+            }).catch((err: Error) => {
+                next(new WrongInputFormatError("validation error",err.message));
             });
     }
     displayAll(req: Request, res: Response, next: NextFunction) {
-        bookService.displayAll().then((book: Book[]) => {
-            res.send(book);
+        bookService.displayAll().then((resp:displayResponse) => {
+            next(resp);
         }
         ).catch((err) => {
             next(err);
@@ -34,38 +33,38 @@ class BooksController {
     }
     displayBook(req: Request, res: Response, next: NextFunction) {
         schemas.default.getbook.validateAsync(req.params.id).then((id: number) => {
-            bookService.displayBook(id).then((book: Book) => {
-                res.send(book);
+            bookService.displayBook(id).then((resp:displayResponse) => {
+                next(resp);
             }
             ).catch((err) => {
                 next(err);
             });
-        }).catch((err: WrongInputFormatError) => {
+        }).catch((err:any) => {
             next(new WrongInputFormatError(err.message));
         });
     }
 
     deleteBook(req: Request, res: Response, next: NextFunction) {
         schemas.default.getbook.validateAsync(req.params.id).then((id: number) => {
-            bookService.deleteBook(id).then((rep: deleteResponse) => {
-                res.send(rep);
+            bookService.deleteBook(id).then((resp: deleteResponse) => {
+                next(resp);
             }
             ).catch((err) => {
                 next(err);
             });
-        }).catch((err: WrongInputFormatError) => {
+        }).catch((err: any) => {
             next(new WrongInputFormatError(err.message));
         });
     }
     updateBook(req: Request, res: Response, next: NextFunction) {
         schemas.default.add.validateAsync(req.body).then((bookData: Book) => {
-            bookService.updateBook(bookData).then((rep:updateResponse) => {
-                res.send(rep);
+            bookService.updateBook(bookData).then((resp:updateResponse) => {
+                next(resp);
             }
             ).catch((err) => {
                 next(err);
             });
-        }).catch((err: WrongInputFormatError) => {
+        }).catch((err: any) => {
             next(new WrongInputFormatError(err.message));
         });
     }
