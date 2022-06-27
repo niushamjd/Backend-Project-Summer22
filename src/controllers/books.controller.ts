@@ -4,6 +4,8 @@ import bookService from '../services/book.service'
 import Book from '../dto/book.dto';
 import { WrongInputFormatError } from '../common/errorHandler';
 import { addResponse, deleteResponse, displayResponse, updateResponse } from '../common/responseHandler';
+import { paginationHandler } from '../middlewares/pagination.mw';
+import { filterHandler } from '../middlewares/filtering.mw';
 
 class BooksController {
     router: express.Router;
@@ -24,12 +26,20 @@ class BooksController {
             });
     }
     displayAll(req: Request, res: Response, next: NextFunction) {
-        bookService.displayAll().then((resp:displayResponse) => {
-            next(resp);
+        const pagination = req.pagination;
+        const filters=req.filters;
+        schemas.default.displayParams.validateAsync(req.params.pagination).then((page:number,limit:number) => {
+            bookService.displayAll(pagination,filters).then((resp: displayResponse) => {
+                next(resp);
+            }
+            ).catch((err) => {
+                next(err);
+            }
+            );
+        }).catch((err: any) => {
+            next(new WrongInputFormatError(err.message));
         }
-        ).catch((err) => {
-            next(err);
-        });
+        );
     }
     displayBook(req: Request, res: Response, next: NextFunction) {
         schemas.default.getbook.validateAsync(req.params.id).then((id: number) => {
@@ -69,7 +79,7 @@ class BooksController {
         });
     }
     routes() {
-        this.router.get('/', this.displayAll);
+        this.router.get('/', paginationHandler,filterHandler, this.displayAll);
         this.router.post('/', this.addBook);
         this.router.route('/:id')
             .get(this.displayBook)

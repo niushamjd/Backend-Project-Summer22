@@ -2,15 +2,13 @@ import { addResponse, deleteResponse, displayResponse, updateResponse } from '..
 import Book from '../dto/book.dto';
 import bookRepository from '../repository/book.repository';
 import { NotFoundError, DuplicateError, GenericError } from '../common/errorHandler';
+import { PaginationParams } from '../dto/pagination.params';
+import { FilterParams } from '../dto/filter.params';
 class bookService {
     constructor() {
     }
     addBook(book: Book): Promise<addResponse> {
-        return new Promise((resolve, reject) => {
-            if (bookRepository.bookExists(book.bookId)) {
-                reject(new DuplicateError("Book already exists"));
-            }
-            else {
+        return new Promise(async (resolve, reject) => {
                 bookRepository.addBook(book).then((res: addResponse) => {
                     resolve(res);
                 }
@@ -18,12 +16,11 @@ class bookService {
                     reject(new GenericError(err.message));
                 }
                 );
-            }
         });
     }
-    displayAll(): Promise<displayResponse> {
+    displayAll(pagination:PaginationParams, filters:FilterParams): Promise<displayResponse> {
         return new Promise((resolve, reject) => {
-            bookRepository.displayAll().then((res: displayResponse) => {
+            bookRepository.displayAll(pagination,filters).then((res: displayResponse) => {
                 resolve(res);
             }
             ).catch((err) => {
@@ -42,8 +39,8 @@ class bookService {
         });
     }
     deleteBook(id: number): Promise<deleteResponse> {
-        return new Promise((resolve, reject) => {
-            if (bookRepository.bookExists(id)) {
+        return new Promise(async (resolve, reject) => {
+            if (await bookRepository.bookExists(id)) {
                 bookRepository.deleteBook(id).then((res: deleteResponse) => {
                     resolve(res);
                 }
@@ -57,8 +54,8 @@ class bookService {
         });
     }
     updateBook(book: Book): Promise<updateResponse> {
-        return new Promise((resolve, reject) => {
-            if (bookRepository.bookExists(book.bookId)) {
+        return new Promise(async (resolve, reject) => {
+            if (await bookRepository.bookExists(book.bookId)) {
                 bookRepository.updateBook(book).then((res: deleteResponse) => {
                     resolve(res);
                 }

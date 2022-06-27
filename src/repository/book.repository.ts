@@ -2,6 +2,8 @@ import Book from '../dto/book.dto';
 import KnexDB from '../db/knex';
 import { NotFoundError, DuplicateError, GenericError } from '../common/errorHandler';
 import { addResponse, deleteResponse, displayResponse, updateResponse } from '../common/responseHandler';
+import { PaginationParams } from '../dto/pagination.params';
+import { FilterParams } from '../dto/filter.params';
 let books: Array<Book>;
 class bookRepository {
     knx: typeof KnexDB;
@@ -9,20 +11,34 @@ class bookRepository {
         books = new Array<Book>();
         this.knx = KnexDB;
     }
-    bookExists(id: number): boolean {
-        this.knx.knexdb('books').where({ bookId: id }).select().then((result) => {
-            if (result.length > 0) {
-                return true;
+
+    totalBooks(): Promise<number> {
+        return new Promise<number>((resolve, reject) => {
+            this.knx.knexdb.count('bookId').from('books').first().then((res) => {
+                resolve(res.count);
             }
-            else {
-                return false;
+            ).catch((error) => {
+                reject(error);
             }
-        }
-        ).catch((error) => {
-            return false;
+            );
         }
         );
-        return false;
+    }
+    bookExists(id: number): Promise<boolean> {
+        return new Promise<boolean>((resolve, reject) => {
+            this.knx.knexdb('books').where({ bookId: id }).select().then((result) => {
+                if (result.length > 0) {
+                    resolve(true);
+                }
+                else {
+                    resolve(false);
+                }
+            }
+            ).catch((error) => {
+                reject(error);
+            }
+            );
+        });
     }
     addBook(book: Book): Promise<addResponse> {
         return new Promise<addResponse>((resolve, reject) => {
@@ -37,15 +53,21 @@ class bookRepository {
 
         });
     }
-    displayAll(): Promise<displayResponse> {
+    displayAll(pagination: PaginationParams,filters: FilterParams): Promise<displayResponse> {
         return new Promise<displayResponse>((resolve, reject) => {
-            this.knx.knexdb('books').select().then((result) => {
-                if (result.length > 0) {
-                    resolve(new displayResponse("Fetch Succesful", result));
-                }
-                else {
-                    reject(new NotFoundError("No books found"));
-                }
+            this.knx.knexdb('books').select().where((builder) => {
+                if (filters.title)
+                    builder.where('title', 'like', '%' + filters.title + '%');
+                if (filters.author)
+                    builder.where('author', 'like', '%' + filters.author + '%');
+                if (filters.bookId)
+                    builder.where('bookId', 'like', '%' + filters.bookId + '%');
+                    
+            }).offset(pagination.offset).limit(pagination.limit).orderBy(pagination.sort,pagination.order).then((result) => {
+
+                resolve(new displayResponse("Fetch Succesful", result));
+
+
             }
             ).catch((error) => {
                 reject(new GenericError("Error fetching books"));
@@ -71,7 +93,7 @@ class bookRepository {
     }
     deleteBook(id: number): Promise<deleteResponse> {
         return new Promise<deleteResponse>((resolve, reject) => {
-            this.knx.knexdb('books').where({ bookId: id }).del().then(() => {
+            this.knx.knexdb('books').where("bookId", id).del().then(() => {
                 resolve(new deleteResponse("Book deleted successfully"));
             }
             ).catch((error) => {
@@ -85,10 +107,10 @@ class bookRepository {
         return new Promise<updateResponse>((resolve, reject) => {
 
             this.knx.knexdb('books').where({ bookId: book.bookId }).update(book).then(() => {
-                resolve(new deleteResponse("Book deleted successfully"));
+                resolve(new updateResponse("Book updated successfully"));
             }
             ).catch((error) => {
-                reject(new GenericError("Error deleting book"));
+                reject(new GenericError("Error updating book"));
             })
         });
     }

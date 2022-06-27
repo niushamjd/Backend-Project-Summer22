@@ -1,7 +1,9 @@
 import express from 'express'
+import { FilterParams } from './dto/filter.params';
+import { PaginationParams } from './dto/pagination.params';
 import BooksController from './controllers/books.controller';
 import knexdb from './db/knex';
-import erroHandlerMiddleware from './middlewares/error.middleware';
+import erroHandlerMiddleware from './middlewares/error.mw';
 import responseHandlerMiddleware from './middlewares/response.middleware';
 
 export class applc {
@@ -28,5 +30,14 @@ routeConfig(){
     this.app.use(erroHandlerMiddleware);
     this.app.use(responseHandlerMiddleware);
 }   
+
 }
+declare global {
+    namespace Express {
+      interface Request {
+        pagination: PaginationParams; 
+        filters: FilterParams;
+      }
+    }
+  }
 const app=new applc();
