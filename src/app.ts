@@ -1,10 +1,14 @@
-import express from 'express'
-import { FilterParams } from './dto/filter.params';
+import express from 'express';
 import { PaginationParams } from './dto/pagination.params';
 import BooksController from './controllers/books.controller';
+import UsersController from './controllers/users.controller';
 import knexdb from './db/knex';
 import erroHandlerMiddleware from './middlewares/error.mw';
 import responseHandlerMiddleware from './middlewares/response.middleware';
+import { filterBookInput } from './dto/book.dto';
+import authController from './controllers/auth.controller';
+import { autheticateUser } from './middlewares/auth.mw';
+import { UserLoginInput } from './dto/user.dto';
 
 export class applc {
 app=express();
@@ -26,7 +30,10 @@ listen(){
 routeConfig(){
     this.app.use(express.json());
     this.app.use(express.urlencoded());
+    this.app.use('/', authController);
+    this.app.use(autheticateUser)
     this.app.use('/books', BooksController);
+    this.app.use('/users', UsersController);
     this.app.use(erroHandlerMiddleware);
     this.app.use(responseHandlerMiddleware);
 }   
@@ -36,7 +43,8 @@ declare global {
     namespace Express {
       interface Request {
         pagination: PaginationParams; 
-        filters: FilterParams;
+        filters: filterBookInput;
+        Authentication: UserLoginInput;
       }
     }
   }

@@ -31,3 +31,18 @@ export class GenericError extends httpException {
         super(message || "Internal Server Error", 500);
     }
 }
+export class InvalidCredentialsException extends httpException {
+    constructor(message?: string) {
+        super(message || "Invalid Login Credentials", 401);
+    }
+}
+export class UserNotFoundException extends httpException {
+    constructor(message?: string) {
+        super(message || "User not found", 404);
+    }
+}
+export class UnauthorizedException extends httpException {
+    constructor(message?: string) {
+        super(message || "Unauthorized", 401);
+    }
+}

@@ -1,7 +1,7 @@
 import express, { Request, Response, NextFunction } from 'express';
-import * as schemas from '../validations/book.validation';
+import * as schemas from '../validations/validation';
 import bookService from '../services/book.service'
-import Book from '../dto/book.dto';
+import { createBookInput, updateBookInput } from '../dto/book.dto';
 import { WrongInputFormatError } from '../common/errorHandler';
 import { addResponse, deleteResponse, displayResponse, updateResponse } from '../common/responseHandler';
 import { paginationHandler } from '../middlewares/pagination.mw';
@@ -15,7 +15,7 @@ class BooksController {
     }
     addBook(req: Request, res: Response, next: NextFunction) {
         schemas.default.add.validateAsync(req.body)
-            .then(async (bookData: Book) => {
+            .then(async (bookData: createBookInput) => {
                 bookService.addBook(bookData).then((resp: addResponse) => {
                     next(resp);
                 }).catch((err) => {
@@ -67,7 +67,7 @@ class BooksController {
         });
     }
     updateBook(req: Request, res: Response, next: NextFunction) {
-        schemas.default.add.validateAsync(req.body).then((bookData: Book) => {
+        schemas.default.add.validateAsync(req.body).then((bookData: updateBookInput) => {
             bookService.updateBook(bookData).then((resp:updateResponse) => {
                 next(resp);
             }

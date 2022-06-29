@@ -1,13 +1,12 @@
 import { addResponse, deleteResponse, displayResponse, updateResponse } from '../common/responseHandler';
-import Book from '../dto/book.dto';
+import { createBookInput, filterBookInput, updateBookInput } from '../dto/book.dto';
 import bookRepository from '../repository/book.repository';
 import { NotFoundError, DuplicateError, GenericError } from '../common/errorHandler';
 import { PaginationParams } from '../dto/pagination.params';
-import { FilterParams } from '../dto/filter.params';
 class bookService {
     constructor() {
     }
-    addBook(book: Book): Promise<addResponse> {
+    addBook(book: createBookInput): Promise<addResponse> {
         return new Promise(async (resolve, reject) => {
                 bookRepository.addBook(book).then((res: addResponse) => {
                     resolve(res);
@@ -18,7 +17,7 @@ class bookService {
                 );
         });
     }
-    displayAll(pagination:PaginationParams, filters:FilterParams): Promise<displayResponse> {
+    displayAll(pagination:PaginationParams, filters:filterBookInput): Promise<displayResponse> {
         return new Promise((resolve, reject) => {
             bookRepository.displayAll(pagination,filters).then((res: displayResponse) => {
                 resolve(res);
@@ -53,7 +52,7 @@ class bookService {
             }
         });
     }
-    updateBook(book: Book): Promise<updateResponse> {
+    updateBook(book: updateBookInput): Promise<updateResponse> {
         return new Promise(async (resolve, reject) => {
             if (await bookRepository.bookExists(book.bookId)) {
                 bookRepository.updateBook(book).then((res: deleteResponse) => {

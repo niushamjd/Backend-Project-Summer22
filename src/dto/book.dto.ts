@@ -1,11 +1,14 @@
-class Book {
-    bookId: number;
+export interface createBookInput {
     title: string;
     author: string;
-    constructor(id: number, title: string, author: string) {
-        this.bookId = id;
-        this.title = title;
-        this.author = author;
-    }
 }
-export default Book;
+export interface updateBookInput {
+    bookId: number;
+    title?: string;
+    author?: string;
+}
+export interface filterBookInput {
+    bookId? : number ;
+    title?: string ;
+    author?: string ;
+}

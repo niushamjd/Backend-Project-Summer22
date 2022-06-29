@@ -3,7 +3,7 @@ import config from '../common/config';
    export class KnexDB {
         constructor() {
             console.log('knex db is created');
-            //this.knexdb.seed.run();
+          //  this.knexdb.seed.run();
         };
         config: Knex.Config = {
             client: "pg",

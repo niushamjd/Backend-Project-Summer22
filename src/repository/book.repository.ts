@@ -1,14 +1,11 @@
-import Book from '../dto/book.dto';
 import KnexDB from '../db/knex';
 import { NotFoundError, DuplicateError, GenericError } from '../common/errorHandler';
 import { addResponse, deleteResponse, displayResponse, updateResponse } from '../common/responseHandler';
 import { PaginationParams } from '../dto/pagination.params';
-import { FilterParams } from '../dto/filter.params';
-let books: Array<Book>;
+import { createBookInput, filterBookInput, updateBookInput } from '../dto/book.dto';
 class bookRepository {
     knx: typeof KnexDB;
     constructor() {
-        books = new Array<Book>();
         this.knx = KnexDB;
     }
 
@@ -40,7 +37,7 @@ class bookRepository {
             );
         });
     }
-    addBook(book: Book): Promise<addResponse> {
+    addBook(book: createBookInput): Promise<addResponse> {
         return new Promise<addResponse>((resolve, reject) => {
 
             this.knx.knexdb('books').insert(book).then(() => {
@@ -53,7 +50,7 @@ class bookRepository {
 
         });
     }
-    displayAll(pagination: PaginationParams,filters: FilterParams): Promise<displayResponse> {
+    displayAll(pagination: PaginationParams,filters: filterBookInput): Promise<displayResponse> {
         return new Promise<displayResponse>((resolve, reject) => {
             this.knx.knexdb('books').select().where((builder) => {
                 if (filters.title)
@@ -103,7 +100,7 @@ class bookRepository {
         });
 
     }
-    updateBook(book: Book): Promise<updateResponse> {
+    updateBook(book: updateBookInput): Promise<updateResponse> {
         return new Promise<updateResponse>((resolve, reject) => {
 
             this.knx.knexdb('books').where({ bookId: book.bookId }).update(book).then(() => {
