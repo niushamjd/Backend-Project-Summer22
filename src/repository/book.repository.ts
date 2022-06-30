@@ -52,6 +52,7 @@ class bookRepository {
     }
     displayAll(pagination: PaginationParams,filters: filterBookInput): Promise<displayResponse> {
         return new Promise<displayResponse>((resolve, reject) => {
+            console.log(filters,pagination);
             this.knx.knexdb('books').select().where((builder) => {
                 if (filters.title)
                     builder.where('title', 'like', '%' + filters.title + '%');
@@ -61,7 +62,7 @@ class bookRepository {
                     builder.where('bookId', 'like', '%' + filters.bookId + '%');
                     
             }).offset(pagination.offset).limit(pagination.limit).orderBy(pagination.sort,pagination.order).then((result) => {
-
+               
                 resolve(new displayResponse("Fetch Succesful", result));
 
 

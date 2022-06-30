@@ -55,7 +55,7 @@ class bookService {
     updateBook(book: updateBookInput): Promise<updateResponse> {
         return new Promise(async (resolve, reject) => {
             if (await bookRepository.bookExists(book.bookId)) {
-                bookRepository.updateBook(book).then((res: deleteResponse) => {
+                bookRepository.updateBook(book).then((res: updateResponse) => {
                     resolve(res);
                 }
                 ).catch((err) => {

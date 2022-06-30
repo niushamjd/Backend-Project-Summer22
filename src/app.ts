@@ -8,6 +8,8 @@ import responseHandlerMiddleware from './middlewares/response.middleware';
 import { filterBookInput } from './dto/book.dto';
 import authController from './controllers/auth.controller';
 import { UserLoginInput } from './dto/user.dto';
+import { paginationHandler } from './middlewares/pagination.mw';
+import { filterHandler } from './middlewares/filtering.mw';
 
 export class applc {
 app=express();
@@ -27,6 +29,8 @@ listen(){
     });
 }
 routeConfig(){
+  this.app.use(paginationHandler);
+    this.app.use(filterHandler)
     this.app.use(express.json());
     this.app.use(express.urlencoded());
     this.app.use('/login', authController);
@@ -34,6 +38,7 @@ routeConfig(){
     this.app.use('/users', UsersController);
     this.app.use(erroHandlerMiddleware);
     this.app.use(responseHandlerMiddleware);
+    
 }   
 
 }

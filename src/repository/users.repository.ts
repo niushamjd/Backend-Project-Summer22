@@ -1,5 +1,5 @@
 import KnexDB from '../db/knex';
-import { NotFoundError, DuplicateError, GenericError } from '../common/errorHandler';
+import { NotFoundError, DuplicateError, GenericError, uniqueError } from '../common/errorHandler';
 import { addResponse, deleteResponse, displayResponse, updateResponse } from '../common/responseHandler';
 import { PaginationParams } from '../dto/pagination.params';
 import { addUserInput, UserLoginInput } from '../dto/user.dto';
@@ -13,8 +13,8 @@ class UsersRepository {
             this.knx.knexdb('users').insert(userData).then((result) => {
                 resolve(new addResponse("User added successfully"));
             }
-            ).catch((error) => {
-                reject(new GenericError("Error adding user"));
+            ).catch((error:uniqueError) => {
+                reject(new GenericError("Username and email must be unique"));
             }
             );
 
@@ -22,7 +22,7 @@ class UsersRepository {
     }
     displayUsers(pagination: PaginationParams): Promise<displayResponse> {
         return new Promise<displayResponse>((resolve, reject) => {
-            this.knx.knexdb('users').select().offset(pagination.offset).limit(pagination.limit).orderBy(pagination.sort,pagination.order).then((result) => {
+            this.knx.knexdb('users').select().offset(pagination.offset).limit(pagination.limit).then((result) => {
 
                 resolve(new displayResponse("Fetch Succesful", result));
 

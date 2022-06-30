@@ -46,3 +46,8 @@ export class UnauthorizedException extends httpException {
         super(message || "Unauthorized", 401);
     }
 }
+export class uniqueError extends httpException {
+    constructor(message?: string) {
+        super(message || "Duplicate Record", 409);
+    }
+}

@@ -4,11 +4,16 @@ const schemas = {
         title: Joi.string().required(),
         author: Joi.string().optional()
     }),
+    update: Joi.object().keys({
+        bookId: Joi.number().required(),
+        title: Joi.string().optional(),
+        author: Joi.string().optional()
+    }),
     getbook: Joi.number().min(1).required()
    ,
    displayParams : Joi.object().keys({
-         page: Joi.number().min(1).required(),
-            limit: Joi.number().min(1).required()
+         page: Joi.number().min(1).optional(),
+            limit: Joi.number().min(1).optional(),
    }),
    addUser: 
     Joi.object().keys({

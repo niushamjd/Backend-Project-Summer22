@@ -67,7 +67,7 @@ class BooksController {
         });
     }
     updateBook(req: Request, res: Response, next: NextFunction) {
-        schemas.default.add.validateAsync(req.body).then((bookData: updateBookInput) => {
+        schemas.default.update.validateAsync(req.body).then((bookData: updateBookInput) => {
             bookService.updateBook(bookData).then((resp:updateResponse) => {
                 next(resp);
             }
