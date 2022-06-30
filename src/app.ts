@@ -29,7 +29,7 @@ listen(){
 routeConfig(){
     this.app.use(express.json());
     this.app.use(express.urlencoded());
-    this.app.use('/', authController);
+    this.app.use('/login', authController);
     this.app.use('/books', BooksController);
     this.app.use('/users', UsersController);
     this.app.use(erroHandlerMiddleware);

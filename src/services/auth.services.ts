@@ -14,6 +14,7 @@ export class authServices {
                 if (await PasswordUtility.comparePassword(user.password, result.data[0].password)) {
                     
                     resolve(new LoginResponse('login successful', 200));
+                    
 
                 } else {
                     reject(new InvalidCredentialsException('Invalid credentials'));
@@ -21,6 +22,7 @@ export class authServices {
             })
         });
     };
+    
 };
 
 const authService = new authServices();

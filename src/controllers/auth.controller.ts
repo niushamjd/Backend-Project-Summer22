@@ -18,18 +18,17 @@ export class AuthController {
         await schemes.default.UserLogin.validateAsync(request)
             .then((user: UserLoginInput) => {
                 AuthServices.loginServices(user).then((result) => {
-                    next(result);
+                    res.send(result);
                 }).catch((err: any) => {
                     next(err);
                 });
             }).catch((err: any) => {
                 next(new WrongInputFormatError(err.message));
             });
-            next();
     }
 
     routes() {
-        this.router.post('/login', this.login);
+        this.router.post('/', this.login);
     };
 };
 

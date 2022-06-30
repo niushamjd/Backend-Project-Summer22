@@ -2,7 +2,6 @@ import KnexDB from '../db/knex';
 import { NotFoundError, DuplicateError, GenericError } from '../common/errorHandler';
 import { addResponse, deleteResponse, displayResponse, updateResponse } from '../common/responseHandler';
 import { PaginationParams } from '../dto/pagination.params';
-import { createBookInput, filterBookInput, updateBookInput } from '../dto/book.dto';
 import { addUserInput, UserLoginInput } from '../dto/user.dto';
 class UsersRepository {
     knx: typeof KnexDB;
