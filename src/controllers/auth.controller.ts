@@ -25,6 +25,7 @@ export class AuthController {
             }).catch((err: any) => {
                 next(new WrongInputFormatError(err.message));
             });
+            next();
     }
 
     routes() {

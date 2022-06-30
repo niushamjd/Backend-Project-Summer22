@@ -4,11 +4,14 @@ import { GenericError } from '../common/errorHandler';
 import { PaginationParams } from '../dto/pagination.params';
 import { addUserInput, UserLoginInput } from '../dto/user.dto';
 import usersRepository from '../repository/users.repository';
+import pswrdUtility from '../utility/pswrd.utility';
 class UsersService {
     constructor() {
     }
     addUser(userData: addUserInput): Promise<addResponse> {
         return new Promise(async (resolve, reject) => {
+               const hashedPass= pswrdUtility.hashPassword(userData.password);
+                userData.password=hashedPass;
                 usersRepository.addUser(userData).then((res: addResponse) => {
                     resolve(res);
                 }

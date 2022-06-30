@@ -1,10 +1,10 @@
 import bcrypt from 'bcrypt';
-class PasswordUtility {
-    generatePasswordHash(password: string): Promise<string> {
-        return bcrypt.hash(password, 10);
-    }
-    comparePassword(password: string, hash: string): Promise<boolean> {
+class pswrdUtility {
+     hashPassword(password: string){
+        return bcrypt.hashSync(password, 10);
+    };
+    comparePassword(password: string, hash: string) {
         return bcrypt.compare(password, hash);
-    }
+    }   
 }
-export default new PasswordUtility();
+export default new pswrdUtility();

@@ -11,12 +11,11 @@ class UsersRepository {
     }
     addUser(userData: addUserInput): Promise<addResponse> {
         return new Promise<addResponse>((resolve, reject) => {
-
-            this.knx.knexdb('users').insert(userData).then(() => {
+            this.knx.knexdb('users').insert(userData).then((result) => {
                 resolve(new addResponse("User added successfully"));
             }
             ).catch((error) => {
-                reject(new GenericError("Error adding users"));
+                reject(new GenericError("Error adding user"));
             }
             );
 
