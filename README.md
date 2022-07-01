@@ -27,6 +27,7 @@ sudo apt-get -y install postgresql
 
 ### Executing program
 
+Change the database name and password and JWT secret key from .env file.
 Run the program with the command yarn dev in terminal.
 
 ## Help
