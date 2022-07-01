@@ -29,7 +29,7 @@ export class updateResponse extends httpResponse {
     }
 }
 export class LoginResponse extends httpResponse {
-    constructor(message: string,data?: any) {
+    constructor(message: string,data?: any, ) {
         super("Login Successful" || message, 200,data);
     }
 }

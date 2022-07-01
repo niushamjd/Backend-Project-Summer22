@@ -19,6 +19,7 @@ class bookService {
     }
     displayAll(pagination:PaginationParams, filters:filterBookInput): Promise<displayResponse> {
         return new Promise((resolve, reject) => {
+            pagination.sort= pagination.sort ? pagination.sort : 'bookId';
             bookRepository.displayAll(pagination,filters).then((res: displayResponse) => {
                 resolve(res);
             }

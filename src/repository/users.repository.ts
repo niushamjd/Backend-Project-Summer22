@@ -22,7 +22,7 @@ class UsersRepository {
     }
     displayUsers(pagination: PaginationParams): Promise<displayResponse> {
         return new Promise<displayResponse>((resolve, reject) => {
-            this.knx.knexdb('users').select().offset(pagination.offset).limit(pagination.limit).then((result) => {
+            this.knx.knexdb('users').select().offset(pagination.offset).limit(pagination.limit).orderBy(pagination.sort,pagination.order).then((result) => {
 
                 resolve(new displayResponse("Fetch Succesful", result));
 

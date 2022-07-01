@@ -7,9 +7,10 @@ import erroHandlerMiddleware from './middlewares/error.mw';
 import responseHandlerMiddleware from './middlewares/response.middleware';
 import { filterBookInput } from './dto/book.dto';
 import authController from './controllers/auth.controller';
-import { UserLoginInput } from './dto/user.dto';
+import { tokenUserInput, UserLoginInput } from './dto/user.dto';
 import { paginationHandler } from './middlewares/pagination.mw';
 import { filterHandler } from './middlewares/filtering.mw';
+import authenticateUser from './middlewares/auth.mw';
 
 export class applc {
 app=express();
@@ -29,6 +30,7 @@ listen(){
     });
 }
 routeConfig(){
+  
   this.app.use(paginationHandler);
     this.app.use(filterHandler)
     this.app.use(express.json());
@@ -42,13 +44,5 @@ routeConfig(){
 }   
 
 }
-declare global {
-    namespace Express {
-      interface Request {
-        pagination: PaginationParams; 
-        filters: filterBookInput;
-        Authentication: UserLoginInput;
-      }
-    }
-  }
+
 const app=new applc();

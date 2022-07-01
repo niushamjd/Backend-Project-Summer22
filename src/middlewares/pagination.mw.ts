@@ -7,9 +7,8 @@ export async function paginationHandler(req: Request, res: Response, next: NextF
     const total= await bookRepository.totalBooks();
     let pageRes: number = page ? parseInt("" + page) : 1;
     let limitRes: number = limit ? parseInt("" + limit) : total;
-    let sortRes: string = sort ? '' + sort : 'bookId';
+    let sortRes: string = sort ? '' + sort : '';
     let orderRes: string = order ? '' + order : 'asc';
-    //get order in repo
     if (pageRes < 1) {
         pageRes = 1;
     }

@@ -52,7 +52,6 @@ class bookRepository {
     }
     displayAll(pagination: PaginationParams,filters: filterBookInput): Promise<displayResponse> {
         return new Promise<displayResponse>((resolve, reject) => {
-            console.log(filters,pagination);
             this.knx.knexdb('books').select().where((builder) => {
                 if (filters.title)
                     builder.where('title', 'like', '%' + filters.title + '%');

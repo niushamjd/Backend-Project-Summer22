@@ -1,5 +1,4 @@
-import { addResponse, deleteResponse, displayResponse, updateResponse } from '../common/responseHandler';
-import bookRepository from '../repository/book.repository';
+import { addResponse, deleteResponse, displayResponse } from '../common/responseHandler';
 import { GenericError } from '../common/errorHandler';
 import { PaginationParams } from '../dto/pagination.params';
 import { addUserInput, UserLoginInput } from '../dto/user.dto';
@@ -23,6 +22,7 @@ class UsersService {
     }
     displayUsers(pagination:PaginationParams): Promise<displayResponse> {
         return new Promise((resolve, reject) => {
+            pagination.sort= pagination.sort ? pagination.sort : 'userId';
             usersRepository.displayUsers(pagination).then((res: displayResponse) => {
                 resolve(res);
             }

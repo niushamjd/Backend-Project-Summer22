@@ -1,0 +1,147 @@
+{
+	"info": {
+		"_postman_id": "25e545f5-5fa7-4116-bc19-b40738812184",
+		"name": "backend proj",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "21372055"
+	},
+	"item": [
+		{
+			"name": "add book",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"bookId\": 43,\n    \"title\": \"Harry 3\",\n    \"author\": \"J.K Rowling\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:3001/books",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3001",
+					"path": [
+						"books"
+					]
+				},
+				"description": "In headers part you need to give the value of the created token in login part in order to be authorized to add books. a post request for adding books to the library, title and author is required to add a new book."
+			},
+			"response": []
+		},
+		{
+			"name": "display books",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"description": "a get request to display all the books in the database. it can show desired page and limit for displaying books as well as sorting by bookId, title or author. It can also display in ascending and descending order. Filtering feature is also available, it can filter by bookId, title or author."
+			},
+			"response": []
+		},
+		{
+			"name": "display a book",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:3001/books/43",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3001",
+					"path": [
+						"books",
+						"43"
+					]
+				},
+				"description": "a get request to display a book with a specified id."
+			},
+			"response": []
+		},
+		{
+			"name": "update book",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"bookId\": 43,\n    \"title\": \"Harry 3\",\n    \"author\": \"J.K Rowling\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:3001/books/43",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3001",
+					"path": [
+						"books",
+						"43"
+					]
+				},
+				"description": "In headers part you need to give the value of the created token in login part in order to be authorized to delete users. A put request to update the information of a book, the bookId is required to determine which book to update."
+			},
+			"response": []
+		},
+		{
+			"name": "delete book",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:3001/books/43",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3001",
+					"path": [
+						"books",
+						"43"
+					]
+				},
+				"description": "In headers part you need to give the value of the created token in login part in order to be authorized to delete users. delete request to delete a book. with the specified id."
+			},
+			"response": []
+		},
+		{
+			"name": "display users",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"description": "In headers part you need to give the value of the created token in login part in order to be authorized to display the users. displays all the users of the library and their information. It also has page, limit, order and sort by features."
+			},
+			"response": []
+		},
+		{
+			"name": "add user",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"description": "In headers part you need to give the value of the created token in login part in order to be authorized to add the users. adds a new user to the database, email and username and password fields are required and username and email must be unique."
+			},
+			"response": []
+		},
+		{
+			"name": "login user",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"description": "a post request for logging in users according to their email and passwords, it displays a login message and the generated token information."
+			},
+			"response": []
+		}
+	]
+}

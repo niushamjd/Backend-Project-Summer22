@@ -2,6 +2,7 @@ import express, { Request, Response, NextFunction } from 'express';
 import { httpException, WrongInputFormatError } from '../common/errorHandler';
 import { addResponse, deleteResponse, displayResponse, httpResponse } from '../common/responseHandler';
 import { addUserInput } from '../dto/user.dto';
+import authenticateUser from '../middlewares/auth.mw';
 import { paginationHandler } from '../middlewares/pagination.mw';
 import usersService from '../services/users.service';
 import schemas from '../validations/validation';
@@ -65,11 +66,11 @@ class UsersController{
     }
 
     routes() {
-        this.router.get('/', paginationHandler, this.displayUsers);
-        this.router.post('/', this.addUser);
+        this.router.get('/',authenticateUser, paginationHandler, this.displayUsers);
+        this.router.post('/',authenticateUser, this.addUser);
         this.router.route('/:id')
-            .get(this.displayUser)
-            .delete(this.deleteUser);
+            .get(authenticateUser,this.displayUser)
+            .delete(authenticateUser,this.deleteUser);
     }
 }
 export default new UsersController().router;

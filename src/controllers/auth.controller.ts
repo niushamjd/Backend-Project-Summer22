@@ -18,7 +18,7 @@ export class AuthController {
         await schemes.default.UserLogin.validateAsync(request)
             .then((user: UserLoginInput) => {
                 AuthServices.loginServices(user).then((result) => {
-                    res.send(result);
+                    next(result);
                 }).catch((err: any) => {
                     next(err);
                 });

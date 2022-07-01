@@ -6,6 +6,7 @@ import { WrongInputFormatError } from '../common/errorHandler';
 import { addResponse, deleteResponse, displayResponse, updateResponse } from '../common/responseHandler';
 import { paginationHandler } from '../middlewares/pagination.mw';
 import { filterHandler } from '../middlewares/filtering.mw';
+import authenticateUser from '../middlewares/auth.mw';
 
 class BooksController {
     router: express.Router;
@@ -80,11 +81,11 @@ class BooksController {
     }
     routes() {
         this.router.get('/', paginationHandler,filterHandler, this.displayAll);
-        this.router.post('/', this.addBook);
+        this.router.post('/',authenticateUser, this.addBook);
         this.router.route('/:id')
             .get(this.displayBook)
-            .delete(this.deleteBook)
-            .put(this.updateBook);
+            .delete(authenticateUser,this.deleteBook)
+            .put(authenticateUser,this.updateBook);
     }
 }
 export default new BooksController().router;
