@@ -6,4 +6,5 @@ const erroHandlerMiddleware = (err: httpException , req: Request, res: Response,
     res.status(err.status);
     res.send(err);
 }
+
 export default erroHandlerMiddleware;
