@@ -1,17 +1,7 @@
 import { Response, Request, NextFunction } from 'express';
-import { filterBookInput } from '../dto/book.dto';
 import { PaginationParams } from '../dto/pagination.params';
-import { tokenUserInput } from '../dto/user.dto';
 import bookRepository from '../repository/book.repository';
-declare global {
-    namespace Express {
-        interface Request {
-            user?: tokenUserInput;
-            filters: filterBookInput;
-            pagination: PaginationParams;
-        }
-    }
-};
+
 export async function paginationHandler(req: Request, res: Response, next: NextFunction) {
     const {page, limit,sort,order} = req.query;
     const total= await bookRepository.totalBooks();

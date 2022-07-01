@@ -12,5 +12,13 @@ function authenticateUser (req: Request, res: Response, next: NextFunction) {
         return res.json({ message: 'User not authorized' });
     }
 };
-
+declare global {
+    namespace Express {
+        interface Request {
+            user?: tokenUserInput;
+            filters: filterBookInput;
+            pagination: PaginationParams;
+        }
+    }
+};
 export default authenticateUser;
