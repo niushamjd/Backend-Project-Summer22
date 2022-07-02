@@ -51,3 +51,8 @@ export class uniqueError extends httpException {
         super(message || "Duplicate Record", 409);
     }
 }
+export class loginError extends httpException {
+    constructor(message?: string) {
+        super(message || "Error Logging in", 400);
+    }
+}

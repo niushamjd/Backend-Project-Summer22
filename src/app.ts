@@ -1,16 +1,12 @@
 import express from 'express';
-import { PaginationParams } from './dto/pagination.params';
 import BooksController from './controllers/books.controller';
 import UsersController from './controllers/users.controller';
 import knexdb from './db/knex';
 import erroHandlerMiddleware from './middlewares/error.mw';
 import responseHandlerMiddleware from './middlewares/response.middleware';
-import { filterBookInput } from './dto/book.dto';
 import authController from './controllers/auth.controller';
-import { tokenUserInput, UserLoginInput } from './dto/user.dto';
 import { paginationHandler } from './middlewares/pagination.mw';
 import { filterHandler } from './middlewares/filtering.mw';
-import authenticateUser from './middlewares/auth.mw';
 
 export class applc {
 app=express();

@@ -68,6 +68,8 @@ class BooksController {
         });
     }
     updateBook(req: Request, res: Response, next: NextFunction) {
+        req.body.bookId = req.params.id;
+        console.log(req.body);
         schemas.default.update.validateAsync(req.body).then((bookData: updateBookInput) => {
             bookService.updateBook(bookData).then((resp:updateResponse) => {
                 next(resp);

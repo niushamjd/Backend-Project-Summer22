@@ -22,8 +22,7 @@ Install yarn package manager globally and install postgreSQL on your PC. Create 
 
 # INSTALL YARN 
 npm install --global yarn
-# INSTALL POSTGRESQL
-sudo apt-get -y install postgresql
+
 
 ### Executing program
 

@@ -10,8 +10,8 @@ class UsersRepository {
     }
     addUser(userData: addUserInput): Promise<addResponse> {
         return new Promise<addResponse>((resolve, reject) => {
-            this.knx.knexdb('users').insert(userData).then((result) => {
-                resolve(new addResponse("User added successfully"));
+            this.knx.knexdb('users').insert(userData).returning('userId').then((id) => {
+                resolve(new addResponse("User added successfully", id[0]));
             }
             ).catch((error:uniqueError) => {
                 reject(new GenericError("Username and email must be unique"));

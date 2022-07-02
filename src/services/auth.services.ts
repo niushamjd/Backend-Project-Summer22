@@ -18,13 +18,18 @@ export class authServices {
                         email: result.data[0].email
                     }
                     const signature=AuthUtilities.generateSignature(payload);
-
-                    resolve(new LoginResponse('login successful', signature));
-
-
+                        resolve({
+                            status: 200,
+                            message: "Login Successful",
+                            data: {
+                                token: signature
+                            }
+                        });
                 } else {
                     reject(new InvalidCredentialsException('Invalid credentials'));
                 }
+            }).catch((err: any) => {
+                reject(err);
             })
         });
     };

@@ -40,8 +40,8 @@ class bookRepository {
     addBook(book: createBookInput): Promise<addResponse> {
         return new Promise<addResponse>((resolve, reject) => {
 
-            this.knx.knexdb('books').insert(book).then(() => {
-                resolve(new addResponse("Book added successfully"));
+            this.knx.knexdb('books').insert(book).returning('bookId').then((id) => {
+                resolve(new addResponse("Book added successfully", id));
             }
             ).catch((error) => {
                 reject(new GenericError("Error adding book"));
@@ -102,7 +102,7 @@ class bookRepository {
     }
     updateBook(book: updateBookInput): Promise<updateResponse> {
         return new Promise<updateResponse>((resolve, reject) => {
-
+            //no book id in update book input
             this.knx.knexdb('books').where({ bookId: book.bookId }).update(book).then(() => {
                 resolve(new updateResponse("Book updated successfully"));
             }
