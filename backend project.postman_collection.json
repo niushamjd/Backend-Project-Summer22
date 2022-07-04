@@ -91,7 +91,7 @@
 						"43"
 					]
 				},
-				"description": "In headers part you need to give the value of the created token in login part in order to be authorized to delete users. A put request to update the information of a book, the bookId is required to determine which book to update."
+				"description": "In headers part you need to give the value of the created token in login part in order to be authorized to delete users. A put request to update the information of a book, the bookId is entered in url and cannot be given in input body."
 			},
 			"response": []
 		},
